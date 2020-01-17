@@ -14,6 +14,26 @@ public class SchoolController {
 
     private SchoolRepository repository = new SchoolRepository();
 
+    @PostMapping("/school")
+    public String postSchool(@ModelAttribute School school) {
+
+        if (school.getId() != null) {
+            repository.update(school);
+        } else {
+            repository.save(school);
+        }
+        return "redirect:/schools";
+    }
+
+    @GetMapping("/school-Id")
+    public String getById(Model model, @RequestParam Long id) {
+
+    model.addAttribute("school", repository.findById(id));
+
+    return "school_del";
+    }
+
+
     @GetMapping("/schools")
     public String getAll(Model model) {
 
@@ -33,17 +53,6 @@ public class SchoolController {
         model.addAttribute("school", school);
 
         return "school";
-    }
-
-    @PostMapping("/school")
-    public String postSchool(@ModelAttribute School school) {
-
-        if (school.getId() != null) {
-            repository.update(school);
-        } else {
-            repository.save(school);
-        }
-        return "redirect:/schools";
     }
 
     @GetMapping("/school/delete")
